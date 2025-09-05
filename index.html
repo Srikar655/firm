@@ -8,10 +8,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #ffffff;
-    --background-color: #000000;
-    --grey-color: #888;
-    --light-grey-bg: #1a1a1a;
+    --primary-color: #00dffc; /* Vibrant Blue */
+    --background-color: #0d0d2b; /* Dark Navy */
+    --grey-color: #9e9e9e;
+    --light-grey-bg: #1a1a3a;
 }
 
 * {
@@ -39,26 +39,63 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+    transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
     opacity: 1;
     visibility: visible;
 }
 
 #preloader .logo {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 700;
-    animation: pulse 1.5s infinite ease-in-out;
+    position: relative;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--primary-color);
+    animation: preloader-fade-out-stroke 0.5s forwards 2.5s;
+}
+
+#preloader .logo::before {
+    content: 'InnovaTech';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    color: var(--primary-color);
+    overflow: hidden;
+    animation: fill-text 1.5s forwards 1s;
+}
+
+#preloader .logo::after {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -20%;
+    width: 15px;
+    height: 120%;
+    background: #fff;
+    box-shadow: 0 0 15px 8px #fff;
+    transform: skewX(-20deg);
+    animation: preloader-shine 1s ease-in-out forwards 0.5s;
+    opacity: 0;
+}
+
+@keyframes preloader-shine {
+    0% { left: -20%; opacity: 1; }
+    90% { opacity: 1; }
+    100% { left: 120%; opacity: 0; }
+}
+
+@keyframes fill-text {
+    to { width: 100%; }
+}
+
+@keyframes preloader-fade-out-stroke {
+    to { -webkit-text-stroke: 1px transparent; }
 }
 
 #preloader.hidden {
     opacity: 0;
     visibility: hidden;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
 }
 
 
@@ -72,16 +109,75 @@ header {
     z-index: 1000;
     background-color: transparent;
     transition: background-color 0.3s;
+    opacity: 0;
+    animation: fade-in-header 0.5s forwards 3s;
+}
+
+@keyframes fade-in-header {
+    to { opacity: 1; }
 }
 
 header.scrolled {
     background-color: var(--background-color);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
 
 .logo {
     font-size: 24px;
     font-weight: 700;
+    position: relative;
+    animation: move-logo-up 1s forwards 3.2s;
+}
+
+@keyframes move-logo-up {
+    from { transform: translateY(50vh); }
+    to { transform: translateY(0); }
+}
+
+.nav-container {
+    transform-origin: left;
+    transform: scaleX(0);
+    opacity: 0;
+    animation: shoot-nav 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards 3.7s;
+}
+
+@keyframes shoot-nav {
+    0% {
+        transform: scaleX(0);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scaleX(1.1);
+    }
+    100% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+}
+
+nav {
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    animation: nav-color-change 1.5s forwards 3.7s, fluid-shape 10s infinite ease-in-out 5s;
+}
+
+@keyframes nav-color-change {
+    from { background-color: var(--primary-color); }
+    to { background-color: var(--fluid-color); }
+}
+
+@keyframes fluid-shape {
+    0% { border-radius: 50px 40px 60px 30px / 40px 50px 30px 60px; }
+    50% { border-radius: 30px 60px 40px 50px / 60px 30px 50px 40px; }
+    100% { border-radius: 50px 40px 60px 30px / 40px 50px 30px 60px; }
 }
 
 nav a {
@@ -89,6 +185,12 @@ nav a {
     text-decoration: none;
     margin: 0 15px;
     font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #fff;
 }
 
 .contact-btn {
@@ -100,6 +202,40 @@ nav a {
     font-weight: 600;
     display: flex;
     align-items: center;
+    position: relative;
+    animation: pop-up-btn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 4s, sparkle-zoom 2s infinite ease-in-out 4.5s;
+    transition: transform 0.3s;
+    transform: scale(0); /* Initially hidden */
+}
+
+@keyframes pop-up-btn {
+    to { transform: scale(1); }
+}
+
+.contact-btn:hover {
+    transform: scale(1.05);
+}
+
+.contact-btn::after {
+    content: '✨';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 1.2rem;
+    animation: sparkle 2s infinite linear 4.5s;
+    opacity: 0;
+}
+
+@keyframes sparkle-zoom {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+@keyframes sparkle {
+    0% { opacity: 0; transform: translateY(0) scale(0.5); }
+    25% { opacity: 1; transform: translateY(-8px) scale(1); }
+    50% { opacity: 0; transform: translateY(-15px) scale(0.5); }
+    100% { opacity: 0; }
 }
 
 .contact-btn i {
@@ -209,14 +345,25 @@ section {
 }
 
 .our-services {
-    background-color: #f3f3f3;
+    background: linear-gradient(180deg, #f5f7fa 0%, #e8ebf0 100%);
     color: var(--background-color);
+    position: relative;
+    perspective: 2000px;
 }
 
-h2 {
-    font-size: 3rem;
-    margin-bottom: 20px;
+.our-services h2 {
+    color: #1a1a2e;
+    text-shadow: 1px 1px 0px #fff;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
 }
+
+.our-services.animate h2 {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .subtitle {
     max-width: 600px;
     margin: 0 auto 40px;
@@ -225,31 +372,64 @@ h2 {
 
 .service-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background-color: #ddd;
-    border: 1px solid #ddd;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
     margin-top: 40px;
+    position: relative;
+    z-index: 1;
 }
 
 .service-item {
-    background-color: #f3f3f3;
-    padding: 40px;
+    background-color: #fff;
+    padding: 35px;
     text-align: left;
     position: relative;
-    overflow: hidden;
     cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s;
+    opacity: 0;
+    transform: scale(0.8);
 }
+
+.our-services.animate .service-item {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Staggered delays for the fly-in animation */
+.our-services.animate .service-item:nth-child(1) { transition-delay: 0.1s; }
+.our-services.animate .service-item:nth-child(2) { transition-delay: 0.2s; }
+.our-services.animate .service-item:nth-child(3) { transition-delay: 0.3s; }
+.our-services.animate .service-item:nth-child(4) { transition-delay: 0.4s; }
+.our-services.animate .service-item:nth-child(5) { transition-delay: 0.5s; }
+.our-services.animate .service-item:nth-child(6) { transition-delay: 0.6s; }
+
+/* Initial positions for the fly-in animation */
+.service-item:nth-child(1) { transform: translate(-100px, -100px) scale(0.8); }
+.service-item:nth-child(2) { transform: translateY(-100px) scale(0.8); }
+.service-item:nth-child(3) { transform: translate(100px, -100px) scale(0.8); }
+.service-item:nth-child(4) { transform: translate(-100px, 100px) scale(0.8); }
+.service-item:nth-child(5) { transform: translateY(100px) scale(0.8); }
+.service-item:nth-child(6) { transform: translate(100px, 100px) scale(0.8); }
+
+.service-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
 .service-item h3 {
-    font-size: 1.8rem;
-    font-weight: 500;
-    margin-bottom: 20px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #2c3e50;
 }
+
 .service-item p {
     color: #555;
     opacity: 0;
     max-height: 0;
-    transition: all 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
 }
 
 .service-item:hover p {
@@ -261,12 +441,14 @@ h2 {
     content: '→';
     font-size: 2rem;
     position: absolute;
-    top: 40px;
-    right: 40px;
+    top: 35px;
+    right: 35px;
+    color: var(--primary-color);
     opacity: 0;
     transform: translateX(-20px);
     transition: all 0.3s;
 }
+
 .service-item:hover::after {
     opacity: 1;
     transform: translateX(0);
@@ -301,71 +483,155 @@ h2 {
 }
 
 .updot-advantage {
-    display: flex;
-    background-color: #f3f3f3;
-    color: #000;
-    text-align: left;
-    gap: 50px;
-    align-items: center;
+    background-color: var(--background-color);
+    text-align: center;
+}
+
+.updot-advantage h2 {
+    font-size: 3.5rem;
+    margin-bottom: 60px;
+    background: linear-gradient(90deg, var(--primary-color), #fff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .advantage-content {
-    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
 }
+
 .advantage-content ul {
     list-style: none;
     margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+    text-align: left;
 }
 
 .advantage-content li {
-    font-size: 1.5rem;
-    padding: 15px 0;
-    border-bottom: 1px solid #ddd;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    padding: 25px;
+    background: var(--light-grey-bg);
+    border-radius: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    color: var(--grey-color);
+}
+
+.advantage-content li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 223, 252, 0.1);
+}
+
+.advantage-content li i {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    width: 40px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.advantage-content li strong {
+    color: #fff;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
 }
 
 .recent-projects {
     background-color: var(--background-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.project-carousel-container {
+    position: relative;
+    margin-top: 50px;
+    perspective: 1500px;
 }
 
 .project-grid {
-    margin-top: 50px;
     display: flex;
-    flex-direction: column;
-    gap: 60px; 
+    gap: 30px; 
+    transition: transform 0.5s ease-in-out;
+    transform-style: preserve-3d;
 }
 
 /* --- REVISED PROJECT HIGHLIGHTS STYLES --- */
 .project-item {
-    background-color: var(--background-color);
-    padding: 0;
-    border-radius: 10px;
+    background: var(--light-grey-bg);
+    border-radius: 15px;
     text-align: left;
-    display: flex;
-    align-items: center;
-    gap: 50px;
+    flex: 0 0 calc(50% - 15px); /* Show 2 items at a time */
+    padding: 40px;
+    border: 1px solid transparent;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s, box-shadow 0.4s, border-color 0.4s;
+    position: relative;
     overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transform: translateY(100px) rotateX(-60deg) scale(0.9);
+    opacity: 0;
 }
 
-/* Style for alternating layout */
-.project-item:nth-child(even) {
-    flex-direction: row-reverse;
-}
-
-.project-image {
-    flex: 1;
-    min-width: 40%;
-}
-
-.project-image img {
+.project-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
     width: 100%;
-    border-radius: 10px;
-    display: block;
-    object-fit: cover;
-    height: 450px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 223, 252, 0.2), transparent);
+    transition: left 0.6s;
+}
+
+.project-item:hover {
+    transform: translateY(-10px) scale(1.02) rotateX(0deg);
+    box-shadow: 0 20px 40px rgba(0, 223, 252, 0.1);
+    border-color: var(--primary-color);
+}
+
+.project-item:hover::before {
+    left: 150%;
+}
+
+.project-item.lifted {
+    transform: translateY(0) rotateX(0) scale(1);
+    opacity: 1;
 }
 
 .project-info {
     flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.carousel-nav {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.carousel-btn {
+    background: var(--primary-color);
+    color: var(--background-color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.carousel-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
 }
 
 .project-info h3 {
@@ -414,18 +680,22 @@ h2 {
 
 footer {
     background-color: #111;
-    padding: 50px;
+    padding: 80px 50px;
+    text-align: center;
 }
 
 .footer-container {
-    display: flex;
-    gap: 50px;
+    max-width: 800px;
+    margin: 0 auto;
 }
-.footer-contact {
-    flex: 1;
-}
+
 .footer-contact h2 {
-    font-size: 2.5rem;
+    font-size: 3rem;
+    color: #fff;
+}
+
+.footer-contact p {
+    margin-bottom: 40px;
 }
 
 form {
@@ -433,7 +703,19 @@ form {
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     margin-top: 30px;
+    text-align: left;
 }
+
+.footer-container form > * {
+    opacity: 0;
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.footer-container.animate form > * {
+    opacity: 1;
+    transform: none !important;
+}
+
 form input, form textarea {
     width: 100%;
     padding: 15px;
@@ -442,21 +724,31 @@ form input, form textarea {
     color: var(--primary-color);
     border-radius: 5px;
 }
+
+form input:nth-child(1) { transform: translateX(-100px); transition-delay: 0.1s; }
+form input:nth-child(2) { transform: translateX(100px); transition-delay: 0.2s; }
+form input:nth-child(3) { transform: translateX(-100px); transition-delay: 0.3s; }
+form input:nth-child(4) { transform: translateX(100px); transition-delay: 0.4s; }
+form input:nth-child(5) { transform: translateX(-100px); transition-delay: 0.5s; }
+form textarea { transform: translateY(100px); transition-delay: 0.6s; }
+form button { transform: translateY(100px); transition-delay: 0.7s; }
+
+
 form textarea {
     grid-column: 1 / -1;
     height: 120px;
 }
+
 form button {
     grid-column: 1 / -1;
-    justify-self: start;
+    justify-self: center;
     border: none;
     cursor: pointer;
 }
 
 .footer-info {
-    flex: 1;
-    text-align: right;
-    padding-top: 80px;
+    margin-top: 60px;
+    opacity: 0.8;
 }
 .footer-info p {
     margin-bottom: 15px;
@@ -496,7 +788,7 @@ form button {
     visibility: visible;
 }
 .modal {
-    background-color: var(--primary-color);
+    background-color: #fff; /* Changed for better contrast */
     color: var(--background-color);
     display: flex;
     width: 900px;
@@ -504,22 +796,57 @@ form button {
     border-radius: 10px;
     overflow: hidden;
     position: relative;
-    transform: scale(0.8);
-    transition: transform 0.5s;
+    transform: scale(0.7);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
 }
+
 .modal-overlay.active .modal {
     transform: scale(1);
+    opacity: 1;
+}
+
+@keyframes scrunch-up {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.8, 1.2) rotate(-5deg);
+    }
+    100% {
+        transform: scale(0) rotate(15deg);
+        opacity: 0;
+    }
+}
+
+.modal.folding-out {
+    transform-origin: center;
+    animation: scrunch-up 0.7s forwards ease-in-out;
 }
 
 .close-modal {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
+    top: 20px;
+    right: 20px;
+    background: #f0f0f0;
     border: none;
-    font-size: 2rem;
-    color: var(--background-color);
+    font-size: 1rem;
+    color: #888;
     cursor: pointer;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    z-index: 20;
+}
+.close-modal:hover {
+    background: #e0e0e0;
+    color: #333;
+    transform: rotate(90deg);
 }
 .modal-content {
     padding: 50px;
@@ -579,17 +906,41 @@ form button {
     }
 }
 
+.hamburger-menu {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1001;
+    padding: 5px;
+}
+.hamburger-menu .fa-times {
+    display: none;
+}
+.hamburger-menu.is-active .fa-bars {
+    display: none;
+}
+.hamburger-menu.is-active .fa-times {
+    display: block;
+}
+
+
 /* Responsive adjustments */
+@media (max-width: 1024px) {
+    .project-item {
+        flex: 0 0 calc(50% - 15px);
+    }
+    .advantage-content ul {
+        grid-template-columns: 1fr;
+        max-height: 450px;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+}
+
 @media (max-width: 900px) {
-    .project-item, .project-item:nth-child(even) {
-        flex-direction: column;
-    }
-    .project-image {
-        max-width: 100%;
-    }
-    .project-image img {
-        height: 300px; /* Adjust image height for mobile */
-    }
     .footer-container {
         flex-direction: column;
         text-align: center;
@@ -604,27 +955,78 @@ form button {
 }
 
 @media (max-width: 768px) {
+    header {
+        padding: 15px 25px;
+    }
+    .hamburger-menu {
+        display: block;
+    }
+    .nav-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(13, 13, 43, 0.95);
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-100%);
+        transition: transform 0.5s ease-in-out;
+        z-index: 1000;
+        animation: none; /* Disable fluid nav animation */
+        opacity: 1; /* Override initial opacity */
+    }
+    .nav-container.active {
+        transform: translateY(0);
+    }
+    nav {
+        animation: none;
+        background: transparent;
+        backdrop-filter: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    nav a {
+        display: block;
+        margin: 20px 0;
+        font-size: 1.8rem;
+        text-align: center;
+    }
+    .contact-btn {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+    .contact-btn .fa-phone-alt {
+        display: none; /* Hide phone icon text on mobile */
+    }
+
     section {
         padding: 60px 25px;
     }
-    h2 {
+    h2, .updot-advantage h2 {
       font-size: 2.5rem;
     }
     .hero h1 {
-      font-size: 3rem;
-    }
-    header {
-        flex-direction: column;
-        padding: 15px;
-    }
-    nav {
-        margin: 10px 0;
+      font-size: 2.8rem;
     }
     .service-grid {
-        grid-template-columns: 1fr;
+        display: block;
+        max-height: 450px;
+        overflow-y: auto;
+        padding-right: 10px; /* For scrollbar */
+    }
+    .service-item {
+        margin-bottom: 20px;
     }
     .logo-grid {
         grid-template-columns: 1fr 1fr;
+    }
+    .project-item {
+        flex: 0 0 100%;
     }
     form {
         grid-template-columns: 1fr;
@@ -634,6 +1036,25 @@ form button {
     }
      .modal-image {
        display: none; 
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    .hero p {
+        font-size: 1rem;
+    }
+    .btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    .logo-grid {
+        grid-template-columns: 1fr;
+    }
+    .advantage-content ul {
+        grid-template-columns: 1fr;
     }
 }
     </style>
@@ -646,14 +1067,23 @@ form button {
     </div>
 
     <header>
-        <div class="logo">InnovaTech</div>
-        <nav>
-            <a href="#">Services</a>
-            <a href="#">Projects</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </nav>
+        <div class="header-left">
+            <div class="logo">InnovaTech</div>
+            <div class="nav-container">
+                <nav>
+                    <a href="#our-services">Services</a>
+                    <a href="#recent-projects">Projects</a>
+                    <a href="#updot-advantage">About</a>
+                    <a href="#footer-contact">Contact</a>
+                </nav>
+            </div>
+        </div>
+        </div>
         <a href="tel:8463951994" class="contact-btn"><i class="fas fa-phone-alt"></i> 8463951994</a>
+        <button class="hamburger-menu">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-times"></i>
+        </button>
     </header>
 
     <main>
@@ -672,7 +1102,7 @@ form button {
             </div>
         </section>
 
-        <section class="our-services">
+        <section class="our-services" id="our-services">
             <h2>Our Core Services</h2>
             <div class="service-grid">
                 <div class="service-item"><h3>Application Architecture & Development</h3><p>Designing and implementing scalable, high-performance application foundations using Spring boot, ASP.NET Web API, C#.NET, and more.</p></div>
@@ -695,108 +1125,94 @@ form button {
             </div>
         </section>
 
-         <section class="recent-projects">
-            <h2 style="margin-bottom: 80px;">Project Highlights</h2>
-            <div class="project-grid">
-                
-                <!-- Project 1: BHEL -->
-                <div class="project-item">
-                    <div class="project-image">
-                        <img src="https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="BHEL – GE Gas Turbine Services">
-                    </div>
-                    <div class="project-info">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Bhel_logo.svg/1200px-Bhel_logo.svg.png" alt="BHEL Logo" class="client-logo">
-                        <h3>BHEL – GE Gas Turbine Services (Multiple Projects)</h3>
-                        <p>We delivered automated reporting, productivity analysis, and inspection process solutions across DSRAuto, Man Hours, and Incoming Inspection Report projects.</p>
-                        <div class="satisfaction-rate">
-                            92%
-                            <span>improvement in reporting efficiency and inspection accuracy</span>
+         <section class="recent-projects" id="recent-projects">
+            <h2>Project Highlights</h2>
+            <div class="project-carousel-container">
+                <div class="project-grid">
+                    
+                    <!-- Project 1: BHEL -->
+                    <div class="project-item">
+                        <div class="project-info">
+                            <h3>BHEL – GE Gas Turbine Services (Multiple Projects)</h3>
+                            <p>We delivered automated reporting, productivity analysis, and inspection process solutions across DSRAuto, Man Hours, and Incoming Inspection Report projects.</p>
+                            <div class="satisfaction-rate">
+                                92%
+                                <span>improvement in reporting efficiency and inspection accuracy</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Project 2: Readefy -->
-                <div class="project-item">
-                    <div class="project-image">
-                        <img src="https://images.pexels.com/photos/3747485/pexels-photo-3747485.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Readefy – Online Book Portal">
-                    </div>
-                    <div class="project-info">
-                        <img src="" alt="Readefy Logo" class="client-logo">
-                        <h3>Readefy – Online Book Portal</h3>
-                        <p>Architected and developed a complete online platform enabling seamless book browsing, purchasing, and reading experience using modern tech stack.</p>
-                        <div class="satisfaction-rate">
-                            90%
-                            <span>increase in user engagement with digital reading features</span>
+                    <!-- Project 2: Readefy -->
+                    <div class="project-item">
+                        <div class="project-info">
+                            <h3>Readefy – Online Book Portal</h3>
+                            <p>Architected and developed a complete online platform enabling seamless book browsing, purchasing, and reading experience using modern tech stack.</p>
+                            <div class="satisfaction-rate">
+                                90%
+                                <span>increase in user engagement with digital reading features</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Project 3: Gamyam -->
-                <div class="project-item">
-                    <div class="project-image">
-                        <img src="https://images.pexels.com/photos/8539031/pexels-photo-8539031.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Gamyam – Tracking & Navigation Solutions">
-                    </div>
-                    <div class="project-info">
-                        <img src="" alt="Gamyam Logo" class="client-logo">
-                        <h3>Gamyam – Tracking & Navigation Solutions</h3>
-                        <p>Created a scalable navigation and tracking system for GVK EMRI – 108 Services and Delhi Public School, improving delivery timeframes and application reliability.</p>
-                        <div class="satisfaction-rate">
-                            96%
-                            <span>accuracy in live tracking and faster response times</span>
+                    <!-- Project 3: Gamyam -->
+                    <div class="project-item">
+                        <div class="project-info">
+                            <h3>Gamyam – Tracking & Navigation Solutions</h3>
+                            <p>Created a scalable navigation and tracking system for GVK EMRI – 108 Services and Delhi Public School, improving delivery timeframes and application reliability.</p>
+                            <div class="satisfaction-rate">
+                                96%
+                                <span>accuracy in live tracking and faster response times</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Project 4: a-mantra -->
-                <div class="project-item">
-                    <div class="project-image">
-                        <img src="https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="a-mantra – Facilities Management System">
-                    </div>
-                    <div class="project-info">
-                        <img src="https://i.ibb.co/L6V2L7W/yes-bank-logo.png" alt="Yes Bank Logo" class="client-logo">
-                        <h3>a-mantra – Facilities Management System</h3>
-                        <p>Redesigned and customized the facilities management system for Yes Bank, enabling streamlined operations with business-specific enhancements.</p>
-                        <div class="satisfaction-rate">
-                            94%
-                            <span>efficiency gain in facilities and asset management</span>
+                    <!-- Project 4: a-mantra -->
+                    <div class="project-item">
+                        <div class="project-info">
+                            <h3>a-mantra – Facilities Management System</h3>
+                            <p>Redesigned and customized the facilities management system for Yes Bank, enabling streamlined operations with business-specific enhancements.</p>
+                            <div class="satisfaction-rate">
+                                94%
+                                <span>efficiency gain in facilities and asset management</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Project 5: SaiNath -->
-                <div class="project-item">
-                    <div class="project-image">
-                        <img src="https://images.pexels.com/photos/163064/play-stone-network-networked-163064.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="SaiNath Documentation Automation">
-                    </div>
-                    <div class="project-info">
-                        <img src="" alt="SaiNath Logo" class="client-logo">
-                        <h3>SaiNath Documentation Automation</h3>
-                        <p>Developed a complete Windows application to automate legal documentation for a government-aided organization, including a custom licensing system.</p>
-                        <div class="satisfaction-rate">
-                            91%
-                            <span>reduction in manual documentation efforts</span>
+                    <!-- Project 5: SaiNath -->
+                    <div class="project-item">
+                        <div class="project-info">
+                            <h3>SaiNath Documentation Automation</h3>
+                            <p>Developed a complete Windows application to automate legal documentation for a government-aided organization, including a custom licensing system.</p>
+                            <div class="satisfaction-rate">
+                                91%
+                                <span>reduction in manual documentation efforts</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
+                <div class="carousel-nav">
+                    <button class="carousel-btn prev-btn">&lt;</button>
+                    <button class="carousel-btn next-btn">&gt;</button>
+                </div>
             </div>
         </section>
 
-        <section class="updot-advantage">
+        <section class="updot-advantage" id="updot-advantage">
             <div class="advantage-content">
                 <h2>Our Advantage</h2>
                 <ul>
-                    <li>Accelerated Time-to-Market: Efficient development practices ensure your product is launched faster.</li>
-                    <li>Expert Architecture: A strong focus on creating scalable, secure, and maintainable solutions.</li>
-                    <li>Proven Leadership: Demonstrated experience leading development teams from concept to completion.</li>
-                    <li>Rigorous Quality Assurance: Commitment to delivering fully tested, high-quality, and reliable source code.</li>
-                    <li>Client-Centric Collaboration: We operate as a true partner to understand and achieve your strategic goals.</li>
+                    <li><i class="fas fa-rocket"></i><div><strong>Accelerated Time-to-Market</strong>Efficient development practices ensure your product is launched faster.</div></li>
+                    <li><i class="fas fa-sitemap"></i><div><strong>Expert Architecture</strong>A strong focus on creating scalable, secure, and maintainable solutions.</div></li>
+                    <li><i class="fas fa-crown"></i><div><strong>Proven Leadership</strong>Demonstrated experience leading development teams from concept to completion.</div></li>
+                    <li><i class="fas fa-shield-alt"></i><div><strong>Rigorous Quality Assurance</strong>Commitment to delivering fully tested, high-quality, and reliable source code.</div></li>
+                    <li><i class="fas fa-hands-helping"></i><div><strong>Client-Centric Collaboration</strong>We operate as a true partner to understand and achieve your strategic goals.</div></li>
                 </ul>
             </div>
         </section>
     </main>
 
-    <footer>
+    <footer id="footer-contact">
          <div class="footer-container">
             <div class="footer-contact">
                 <h2>Get In Touch</h2>
@@ -812,20 +1228,20 @@ form button {
                 </form>
             </div>
             <div class="footer-info">
-                 <p><a href="http://www.innovativesoftwaresolutions.org" target="_blank">www.innovativesoftwaresolutions.org</a></p>
-                 <p><a href="mailto:info@innovativesoftwaresolutions.org">info@innovativesoftwaresolutions.org</a></p>
-                 <p><a href="tel:8463951994">8463951994</a></p>
+                 <p>
+                    <a href="http://www.innovativesoftwaresolutions.org" target="_blank">www.innovativesoftwaresolutions.org</a> | 
+                    <a href="mailto:info@innovativesoftwaresolutions.org">info@innovativesoftwaresolutions.org</a> | 
+                    <a href="tel:8463951994">8463951994</a>
+                </p>
+                 <p class="copyright">© 2025 InnovaTech. All rights reserved.</p>
             </div>
-        </div>
-        <div class="copyright">
-            © 2025 InnovaTech. All rights reserved.
         </div>
     </footer>
 
     <!-- POPUP MODAL CODE -->
     <div class="modal-overlay" id="consultancy-modal">
         <div class="modal">
-            <button class="close-modal">&times;</button>
+            <button class="close-modal"><i class="fas fa-times"></i></button>
             <div class="modal-content">
                 <h2>Get A Free Consultancy</h2>
                 <p style="color:#555; margin-bottom: 20px;">Let's discuss how we can help your business grow. Fill out the form below to get started.</p>
@@ -857,7 +1273,7 @@ window.addEventListener('load', function() {
     const preloader = document.getElementById('preloader');
     setTimeout(() => {
         preloader.classList.add('hidden');
-    }, 1500); // 1.5 seconds
+    }, 3000); // 3 seconds
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -869,6 +1285,20 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             header.classList.remove('scrolled');
         }
+    });
+
+    // Smooth scrolling for nav links
+    document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if(targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
     });
 
     // Fade-in sections on scroll
@@ -914,16 +1344,146 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Close modal with the 'X' button
     closeModalBtn.addEventListener('click', () => {
-        modal.classList.remove('active');
+        const modalContent = document.querySelector('.modal');
+        modalContent.classList.add('folding-out');
+
+        modalContent.addEventListener('animationend', () => {
+            modal.classList.remove('active');
+            modalContent.classList.remove('folding-out');
+        }, { once: true });
     });
 
     // Close modal by clicking on the overlay background
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-            modal.classList.remove('active');
+            const modalContent = document.querySelector('.modal');
+            modalContent.classList.add('folding-out');
+
+            modalContent.addEventListener('animationend', () => {
+                modal.classList.remove('active');
+                modalContent.classList.remove('folding-out');
+            }, { once: true });
         }
     });
 
+    // --- PROJECT CAROUSEL SCRIPT ---
+    const projectGrid = document.querySelector('.project-grid');
+    const projectItems = document.querySelectorAll('.project-item');
+    const nextBtn = document.querySelector('.next-btn');
+    const prevBtn = document.querySelector('.prev-btn');
+    let currentIndex = 0;
+    let itemsToShow = 2;
+    const totalItems = projectItems.length;
+    let autoScrollInterval;
+
+    function updateCarousel() {
+        const itemWidth = projectItems[0].offsetWidth + 30; // width + gap
+        projectGrid.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+    }
+
+    function showNext() {
+        currentIndex = (currentIndex + 1) % (totalItems - itemsToShow + 1);
+        updateCarousel();
+    }
+
+    function showPrev() {
+        currentIndex = (currentIndex - 1 + (totalItems - itemsToShow + 1)) % (totalItems - itemsToShow + 1);
+        updateCarousel();
+    }
+
+    function startAutoScroll() {
+        autoScrollInterval = setInterval(showNext, 5000); // Auto-scroll every 5 seconds
+    }
+
+    function stopAutoScroll() {
+        clearInterval(autoScrollInterval);
+    }
+
+    nextBtn.addEventListener('click', () => {
+        showNext();
+        stopAutoScroll();
+        startAutoScroll();
+    });
+
+    prevBtn.addEventListener('click', () => {
+        showPrev();
+        stopAutoScroll();
+        startAutoScroll();
+    });
+    
+    // Animate-in for services section
+    const servicesSection = document.querySelector('.our-services');
+    const servicesObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                servicesSection.classList.add('animate');
+                observer.unobserve(servicesSection);
+            }
+        });
+    }, { threshold: 0.2 });
+    servicesObserver.observe(servicesSection);
+
+    // Lift animation for project section
+    const projectSection = document.querySelector('.recent-projects');
+    const projectObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                projectItems.forEach((item, index) => {
+                    item.style.transitionDelay = `${index * 150}ms`;
+                    item.classList.add('lifted');
+                });
+                startAutoScroll();
+                projectObserver.unobserve(projectSection);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    projectObserver.observe(projectSection);
+
+    // Animate form fields
+    const footerContainer = document.querySelector('.footer-container');
+    const footerObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                footerContainer.classList.add('animate');
+                observer.unobserve(footerContainer);
+            }
+        });
+    }, { threshold: 0.2 });
+    footerObserver.observe(footerContainer);
+    
+    // Responsive carousel
+    function handleResize() {
+        if (window.innerWidth <= 768) {
+            itemsToShow = 1;
+        } else {
+            itemsToShow = 2;
+        }
+        updateCarousel();
+    }
+    
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
+
+
+    // --- HAMBURGER MENU SCRIPT ---
+    const hamburger = document.querySelector('.hamburger-menu');
+    const navContainer = document.querySelector('.nav-container');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('is-active');
+        navContainer.classList.toggle('active');
+    });
+
+    // Close nav when a link is clicked on mobile
+    document.querySelectorAll('.nav-container a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (navContainer.classList.contains('active')) {
+                hamburger.classList.remove('is-active');
+                navContainer.classList.remove('active');
+            }
+        });
+    });
 });
 </script>
 </body>
