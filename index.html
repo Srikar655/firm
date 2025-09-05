@@ -1053,8 +1053,8 @@ form button {
         }
     }
 
-    .footer-contact form input:nth-child(odd) { transform: translateX(-50px); }
-    .footer-contact form input:nth-child(even) { transform: translateX(50px); }
+    .footer-contact form input:nth-child(odd) { transform: translate(-50px, -50px); }
+    .footer-contact form input:nth-child(even) { transform: translate(50px, -50px); }
 }
 
 @media (max-width: 480px) {
@@ -1287,7 +1287,7 @@ window.addEventListener('load', function() {
     const preloader = document.getElementById('preloader');
     setTimeout(() => {
         preloader.classList.add('hidden');
-    }, 4000); // 4 seconds
+    }, 3600); // 3.6 seconds
 });
 
 document.addEventListener('DOMContentLoaded', function() {
