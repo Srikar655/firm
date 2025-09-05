@@ -44,6 +44,16 @@ body {
     visibility: visible;
 }
 
+body.preloader-hidden #preloader {
+    opacity: 0;
+    visibility: hidden;
+}
+
+body.preloader-hidden header .logo {
+    opacity: 1;
+    transition: opacity 0.2s 0.1s;
+}
+
 #preloader .logo {
     font-size: 3.5rem;
     font-weight: 700;
@@ -118,12 +128,6 @@ header {
     z-index: 1000;
     background-color: transparent;
     transition: background-color 0.3s;
-    opacity: 0;
-    animation: fade-in-header 0.5s forwards 3.5s;
-}
-
-@keyframes fade-in-header {
-    to { opacity: 1; }
 }
 
 header.scrolled {
@@ -141,13 +145,8 @@ header.scrolled {
     font-size: 24px;
     font-weight: 700;
     position: relative;
-    /* animation: move-logo-up 1s forwards 3.2s; */
+    opacity: 0;
 }
-
-/* @keyframes move-logo-up {
-    from { transform: translateY(50vh); }
-    to { transform: translateY(0); }
-} */
 
 .nav-container {
     transform-origin: left;
@@ -1279,9 +1278,10 @@ form button {
     <script>
 // Beginning Animation
 window.addEventListener('load', function() {
-    const preloader = document.getElementById('preloader');
+    document.body.classList.add('preloading');
     setTimeout(() => {
-        preloader.classList.add('hidden');
+        document.body.classList.remove('preloading');
+        document.body.classList.add('preloader-hidden');
     }, 3600); // 3.6 seconds
 });
 
