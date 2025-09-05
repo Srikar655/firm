@@ -50,7 +50,7 @@ body {
     position: relative;
     color: transparent;
     -webkit-text-stroke: 1px var(--primary-color);
-    animation: preloader-fade-out-stroke 0.5s forwards 2.5s;
+    animation: preloader-fade-out-stroke 0.5s forwards 2.5s, move-to-header 0.8s forwards 2.8s;
 }
 
 #preloader .logo::before {
@@ -63,6 +63,17 @@ body {
     color: var(--primary-color);
     overflow: hidden;
     animation: fill-text 1.5s forwards 1s;
+}
+
+@keyframes move-to-header {
+    from {
+        transform: translate(0, 0) scale(1);
+        font-size: 3.5rem;
+    }
+    to {
+        transform: translate(calc(-50vw + 130px), calc(-50vh + 40px)) scale(0.4);
+        font-size: 3.5rem;
+    }
 }
 
 #preloader .logo::after {
@@ -110,7 +121,7 @@ header {
     background-color: transparent;
     transition: background-color 0.3s;
     opacity: 0;
-    animation: fade-in-header 0.5s forwards 3s;
+    animation: fade-in-header 0.5s forwards 3.5s;
 }
 
 @keyframes fade-in-header {
@@ -132,13 +143,12 @@ header.scrolled {
     font-size: 24px;
     font-weight: 700;
     position: relative;
-    animation: move-logo-up 1s forwards 3.2s;
 }
 
-@keyframes move-logo-up {
+/* @keyframes move-logo-up {
     from { transform: translateY(50vh); }
     to { transform: translateY(0); }
-}
+} */
 
 .nav-container {
     transform-origin: left;
@@ -669,6 +679,30 @@ section {
 }
 /* --- END OF REVISED STYLES --- */
 
+/* --- GET IN TOUCH FORM ANIMATION --- */
+.footer-contact form > * {
+    opacity: 0;
+    transition: opacity 0.6s ease-out, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.footer-contact form input:nth-child(odd) { transform: translateX(-100px); }
+.footer-contact form input:nth-child(even) { transform: translateX(100px); }
+.footer-contact form textarea { transform: translateY(80px); }
+.footer-contact form button { transform: scale(0.5); }
+
+.footer-contact form.animate-form > * {
+    opacity: 1;
+    transform: none;
+}
+
+.footer-contact form.animate-form *:nth-child(1) { transition-delay: 0.0s; }
+.footer-contact form.animate-form *:nth-child(2) { transition-delay: 0.1s; }
+.footer-contact form.animate-form *:nth-child(3) { transition-delay: 0.2s; }
+.footer-contact form.animate-form *:nth-child(4) { transition-delay: 0.3s; }
+.footer-contact form.animate-form *:nth-child(5) { transition-delay: 0.4s; }
+.footer-contact form.animate-form *:nth-child(6) { transition-delay: 0.5s; }
+.footer-contact form.animate-form *:nth-child(7) { transition-delay: 0.6s; }
+/* --- END OF FORM ANIMATION --- */
 
 footer {
     background-color: #111;
@@ -1010,6 +1044,17 @@ form button {
      .modal-image {
        display: none; 
     }
+
+    /* Responsive adjustments for new animations */
+    @keyframes move-to-header {
+        to {
+            transform: translate(calc(-50vw + 100px), calc(-50vh + 30px)) scale(0.4);
+            font-size: 3.5rem;
+        }
+    }
+
+    .footer-contact form input:nth-child(odd) { transform: translateX(-50px); }
+    .footer-contact form input:nth-child(even) { transform: translateX(50px); }
 }
 
 @media (max-width: 480px) {
@@ -1242,7 +1287,7 @@ window.addEventListener('load', function() {
     const preloader = document.getElementById('preloader');
     setTimeout(() => {
         preloader.classList.add('hidden');
-    }, 3000); // 3 seconds
+    }, 4000); // 4 seconds
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1441,6 +1486,21 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // --- FORM ANIMATION OBSERVER ---
+    const form = document.querySelector('.footer-contact form');
+    const formObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                form.classList.add('animate-form');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    if (form) {
+        formObserver.observe(form);
+    }
 });
 </script>
 </body>
