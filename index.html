@@ -260,18 +260,10 @@ section {
     text-align: center;
     overflow: hidden;
     padding: 0 50px;
-}
-
-#hero-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    z-index: 1;
+    background-image: url('assets/images/pexels-negativespace-169573.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .hero::after {
@@ -706,16 +698,6 @@ form {
     text-align: left;
 }
 
-.footer-container form > * {
-    opacity: 0;
-    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
-}
-
-.footer-container.animate form > * {
-    opacity: 1;
-    transform: none !important;
-}
-
 form input, form textarea {
     width: 100%;
     padding: 15px;
@@ -724,15 +706,6 @@ form input, form textarea {
     color: var(--primary-color);
     border-radius: 5px;
 }
-
-form input:nth-child(1) { transform: translateX(-100px); transition-delay: 0.1s; }
-form input:nth-child(2) { transform: translateX(100px); transition-delay: 0.2s; }
-form input:nth-child(3) { transform: translateX(-100px); transition-delay: 0.3s; }
-form input:nth-child(4) { transform: translateX(100px); transition-delay: 0.4s; }
-form input:nth-child(5) { transform: translateX(-100px); transition-delay: 0.5s; }
-form textarea { transform: translateY(100px); transition-delay: 0.6s; }
-form button { transform: translateY(100px); transition-delay: 0.7s; }
-
 
 form textarea {
     grid-column: 1 / -1;
@@ -1088,10 +1061,6 @@ form button {
 
     <main>
         <section class="hero">
-            <video autoplay loop muted playsinline id="hero-video">
-                <source src="istockphoto-2184913689-640_adpp_is.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
             <div class="hero-content">
                 <h1>Crafting Robust & Scalable<br>Digital Solutions</h1>
                 <p>Your Partner in Application Architecture & Development</p>
@@ -1440,18 +1409,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     projectObserver.observe(projectSection);
 
-    // Animate form fields
-    const footerContainer = document.querySelector('.footer-container');
-    const footerObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                footerContainer.classList.add('animate');
-                observer.unobserve(footerContainer);
-            }
-        });
-    }, { threshold: 0.2 });
-    footerObserver.observe(footerContainer);
-    
     // Responsive carousel
     function handleResize() {
         if (window.innerWidth <= 768) {
