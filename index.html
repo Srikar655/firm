@@ -68,11 +68,9 @@ body {
 @keyframes move-to-header {
     from {
         transform: translate(0, 0) scale(1);
-        font-size: 3.5rem;
     }
     to {
         transform: translate(calc(-50vw + 130px), calc(-50vh + 40px)) scale(0.4);
-        font-size: 3.5rem;
     }
 }
 
@@ -143,6 +141,7 @@ header.scrolled {
     font-size: 24px;
     font-weight: 700;
     position: relative;
+    /* animation: move-logo-up 1s forwards 3.2s; */
 }
 
 /* @keyframes move-logo-up {
@@ -726,7 +725,7 @@ footer {
 
 form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 15px;
     margin-top: 30px;
     text-align: left;
@@ -1035,9 +1034,6 @@ form button {
     .project-item {
         flex: 0 0 100%;
     }
-    form {
-        grid-template-columns: 1fr;
-    }
     .modal {
         flex-direction: column;
     }
@@ -1049,7 +1045,6 @@ form button {
     @keyframes move-to-header {
         to {
             transform: translate(calc(-50vw + 100px), calc(-50vh + 30px)) scale(0.4);
-            font-size: 3.5rem;
         }
     }
 
@@ -1287,7 +1282,7 @@ window.addEventListener('load', function() {
     const preloader = document.getElementById('preloader');
     setTimeout(() => {
         preloader.classList.add('hidden');
-    }, 4000); // 4 seconds
+    }, 3600); // 3.6 seconds
 });
 
 document.addEventListener('DOMContentLoaded', function() {
