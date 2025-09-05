@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnovaTech - Digital Solutions</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #ffffff;
+    --background-color: #000000;
+    --grey-color: #888;
+    --light-grey-bg: #1a1a1a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    overflow-x: hidden;
+}
+
+/* Preloader Animation Styles */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+    opacity: 1;
+    visibility: visible;
+}
+
+#preloader .logo {
+    font-size: 3rem;
+    font-weight: 700;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+#preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    background-color: transparent;
+    transition: background-color 0.3s;
+}
+
+header.scrolled {
+    background-color: var(--background-color);
+}
+
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+nav a {
+    color: var(--primary-color);
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: 500;
+}
+
+.contact-btn {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.contact-btn i {
+    margin-right: 8px;
+}
+
+main {
+    padding-top: 0;
+}
+
+section {
+    padding: 80px 50px;
+    text-align: center;
+}
+
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 0 50px;
+}
+
+#hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 1;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.hero h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s forwards;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s 0.3s forwards;
+}
+
+.hero-buttons {
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s 0.9s forwards;
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    padding: 15px 30px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 5px;
+    margin: 0 10px;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background-color: #ccc;
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+.btn-outline:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+.our-services {
+    background-color: #f3f3f3;
+    color: var(--background-color);
+}
+
+h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+.subtitle {
+    max-width: 600px;
+    margin: 0 auto 40px;
+    color: #555;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background-color: #ddd;
+    border: 1px solid #ddd;
+    margin-top: 40px;
+}
+
+.service-item {
+    background-color: #f3f3f3;
+    padding: 40px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+.service-item h3 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+.service-item p {
+    color: #555;
+    opacity: 0;
+    max-height: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.service-item:hover p {
+    opacity: 1;
+    max-height: 200px;
+}
+
+.service-item::after {
+    content: '→';
+    font-size: 2rem;
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s;
+}
+.service-item:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+.clientele {
+    background-color: var(--background-color);
+}
+
+.logo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 40px;
+    align-items: center;
+    margin-top: 50px;
+}
+.logo-grid .client-name {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    font-weight: 500;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+    border: 1px solid var(--grey-color);
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.logo-grid .client-name:hover {
+    opacity: 1;
+    border-color: var(--primary-color);
+}
+
+.updot-advantage {
+    display: flex;
+    background-color: #f3f3f3;
+    color: #000;
+    text-align: left;
+    gap: 50px;
+    align-items: center;
+}
+
+.advantage-content {
+    flex: 1;
+}
+.advantage-content ul {
+    list-style: none;
+    margin-top: 30px;
+}
+
+.advantage-content li {
+    font-size: 1.5rem;
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.recent-projects {
+    background-color: var(--background-color);
+}
+
+.project-grid {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 60px; 
+}
+
+/* --- REVISED PROJECT HIGHLIGHTS STYLES --- */
+.project-item {
+    background-color: var(--background-color);
+    padding: 0;
+    border-radius: 10px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    overflow: hidden;
+}
+
+/* Style for alternating layout */
+.project-item:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.project-image {
+    flex: 1;
+    min-width: 40%;
+}
+
+.project-image img {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+    object-fit: cover;
+    height: 450px;
+}
+
+.project-info {
+    flex: 1;
+}
+
+.project-info h3 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
+
+.project-info p {
+    color: var(--grey-color);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 500px;
+    margin-bottom: 30px;
+}
+
+.project-info .client-logo {
+    height: 30px; 
+    margin-bottom: 20px;
+    filter: brightness(0) invert(1); 
+    opacity: 0.8;
+}
+/* Hide logo if the src is empty */
+.project-info .client-logo[src=""] {
+    display: none;
+}
+
+.project-info .satisfaction-rate {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-top: 30px;
+    line-height: 1;
+}
+.project-info .satisfaction-rate span {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--grey-color);
+    display: block;
+    margin-top: 10px;
+    line-height: 1.4;
+    max-width: 300px; 
+}
+/* --- END OF REVISED STYLES --- */
+
+
+footer {
+    background-color: #111;
+    padding: 50px;
+}
+
+.footer-container {
+    display: flex;
+    gap: 50px;
+}
+.footer-contact {
+    flex: 1;
+}
+.footer-contact h2 {
+    font-size: 2.5rem;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 30px;
+}
+form input, form textarea {
+    width: 100%;
+    padding: 15px;
+    background-color: #222;
+    border: 1px solid #444;
+    color: var(--primary-color);
+    border-radius: 5px;
+}
+form textarea {
+    grid-column: 1 / -1;
+    height: 120px;
+}
+form button {
+    grid-column: 1 / -1;
+    justify-self: start;
+    border: none;
+    cursor: pointer;
+}
+
+.footer-info {
+    flex: 1;
+    text-align: right;
+    padding-top: 80px;
+}
+.footer-info p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+.footer-info a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.copyright {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+    color: var(--grey-color);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+.modal {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    display: flex;
+    width: 900px;
+    max-width: 90%;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    transform: scale(0.8);
+    transition: transform 0.5s;
+}
+.modal-overlay.active .modal {
+    transform: scale(1);
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--background-color);
+    cursor: pointer;
+}
+.modal-content {
+    padding: 50px;
+    flex: 2;
+}
+.modal-content h2 {
+    font-size: 2rem;
+}
+.modal-content form {
+    grid-template-columns: 1fr;
+}
+.modal-content form input, .modal-content form select {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #000;
+}
+.phone-input {
+    display: flex;
+}
+.phone-input select {
+    border-right: none;
+    border-radius: 5px 0 0 5px;
+    padding: 15px;
+}
+.phone-input input {
+     border-radius: 0 5px 5px 0;
+}
+.modal-image {
+    flex: 1;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    background-color: #f3f3f3;
+    overflow: hidden;
+}
+.modal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .project-item, .project-item:nth-child(even) {
+        flex-direction: column;
+    }
+    .project-image {
+        max-width: 100%;
+    }
+    .project-image img {
+        height: 300px; /* Adjust image height for mobile */
+    }
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-info {
+        text-align: center;
+        padding-top: 20px;
+    }
+    form button {
+        justify-self: center;
+    }
+}
+
+@media (max-width: 768px) {
+    section {
+        padding: 60px 25px;
+    }
+    h2 {
+      font-size: 2.5rem;
+    }
+    .hero h1 {
+      font-size: 3rem;
+    }
+    header {
+        flex-direction: column;
+        padding: 15px;
+    }
+    nav {
+        margin: 10px 0;
+    }
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
+    .logo-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    form {
+        grid-template-columns: 1fr;
+    }
+    .modal {
+        flex-direction: column;
+    }
+     .modal-image {
+       display: none; 
+    }
+}
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="logo">InnovaTech</div>
+    </div>
+
+    <header>
+        <div class="logo">InnovaTech</div>
+        <nav>
+            <a href="#">Services</a>
+            <a href="#">Projects</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+        <a href="tel:8463951994" class="contact-btn"><i class="fas fa-phone-alt"></i> 8463951994</a>
+    </header>
+
+    <main>
+        <section class="hero">
+            <video autoplay loop muted playsinline id="hero-video">
+                <source src="42670-432087053.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="hero-content">
+                <h1>Crafting Robust & Scalable<br>Digital Solutions</h1>
+                <p>Your Partner in Application Architecture & Development</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn" id="get-quote-btn">Get a Quote</a>
+                    <a href="#" class="btn btn-outline">Our Works</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="our-services">
+            <h2>Our Core Services</h2>
+            <div class="service-grid">
+                <div class="service-item"><h3>Application Architecture & Development</h3><p>Designing and implementing scalable, high-performance application foundations using Spring boot, ASP.NET Web API, C#.NET, and more.</p></div>
+                <div class="service-item"><h3>Custom Software Development</h3><p>Building bespoke software from the ground up to meet specific business challenges and objectives.</p></div>
+                <div class="service-item"><h3>Legacy System Modernization</h3><p>Upgrading and redesigning existing applications with business-specific customizations for improved performance and functionality.</p></div>
+                <div class="service-item"><h3>Database Design & Management</h3><p>Expertise in MS SQL Server, Oracle 9i, and MS Access to create robust and reliable data solutions.</p></div>
+                <div class="service-item"><h3>Project & Team Leadership</h3><p>Managing all phases of application development and leading teams to ensure timely and successful project delivery.</p></div>
+                <div class="service-item"><h3>Quality Assurance</h3><p>Commitment to delivering fully tested, high-quality, and reliable source code to ensure your application runs smoothly.</p></div>
+            </div>
+        </section>
+
+        <section class="clientele">
+            <h2>Trusted By</h2>
+            <div class="logo-grid">
+                <div class="client-name">GVK EMRI – 108 Services</div>
+                <div class="client-name">Yes Bank</div>
+                <div class="client-name">BHEL – GE Gas Turbine Services</div>
+                <div class="client-name">Delhi Public School</div>
+                <div class="client-name">Government Aided Organizations</div>
+            </div>
+        </section>
+
+         <section class="recent-projects">
+            <h2 style="margin-bottom: 80px;">Project Highlights</h2>
+            <div class="project-grid">
+                
+                <!-- Project 1: BHEL -->
+                <div class="project-item">
+                    <div class="project-image">
+                        <img src="https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="BHEL – GE Gas Turbine Services">
+                    </div>
+                    <div class="project-info">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Bhel_logo.svg/1200px-Bhel_logo.svg.png" alt="BHEL Logo" class="client-logo">
+                        <h3>BHEL – GE Gas Turbine Services (Multiple Projects)</h3>
+                        <p>We delivered automated reporting, productivity analysis, and inspection process solutions across DSRAuto, Man Hours, and Incoming Inspection Report projects.</p>
+                        <div class="satisfaction-rate">
+                            92%
+                            <span>improvement in reporting efficiency and inspection accuracy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Readefy -->
+                <div class="project-item">
+                    <div class="project-image">
+                        <img src="https://images.pexels.com/photos/3747485/pexels-photo-3747485.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Readefy – Online Book Portal">
+                    </div>
+                    <div class="project-info">
+                        <img src="" alt="Readefy Logo" class="client-logo">
+                        <h3>Readefy – Online Book Portal</h3>
+                        <p>Architected and developed a complete online platform enabling seamless book browsing, purchasing, and reading experience using modern tech stack.</p>
+                        <div class="satisfaction-rate">
+                            90%
+                            <span>increase in user engagement with digital reading features</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: Gamyam -->
+                <div class="project-item">
+                    <div class="project-image">
+                        <img src="https://images.pexels.com/photos/8539031/pexels-photo-8539031.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Gamyam – Tracking & Navigation Solutions">
+                    </div>
+                    <div class="project-info">
+                        <img src="" alt="Gamyam Logo" class="client-logo">
+                        <h3>Gamyam – Tracking & Navigation Solutions</h3>
+                        <p>Created a scalable navigation and tracking system for GVK EMRI – 108 Services and Delhi Public School, improving delivery timeframes and application reliability.</p>
+                        <div class="satisfaction-rate">
+                            96%
+                            <span>accuracy in live tracking and faster response times</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: a-mantra -->
+                <div class="project-item">
+                    <div class="project-image">
+                        <img src="https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="a-mantra – Facilities Management System">
+                    </div>
+                    <div class="project-info">
+                        <img src="https://i.ibb.co/L6V2L7W/yes-bank-logo.png" alt="Yes Bank Logo" class="client-logo">
+                        <h3>a-mantra – Facilities Management System</h3>
+                        <p>Redesigned and customized the facilities management system for Yes Bank, enabling streamlined operations with business-specific enhancements.</p>
+                        <div class="satisfaction-rate">
+                            94%
+                            <span>efficiency gain in facilities and asset management</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5: SaiNath -->
+                <div class="project-item">
+                    <div class="project-image">
+                        <img src="https://images.pexels.com/photos/163064/play-stone-network-networked-163064.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="SaiNath Documentation Automation">
+                    </div>
+                    <div class="project-info">
+                        <img src="" alt="SaiNath Logo" class="client-logo">
+                        <h3>SaiNath Documentation Automation</h3>
+                        <p>Developed a complete Windows application to automate legal documentation for a government-aided organization, including a custom licensing system.</p>
+                        <div class="satisfaction-rate">
+                            91%
+                            <span>reduction in manual documentation efforts</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="updot-advantage">
+            <div class="advantage-content">
+                <h2>Our Advantage</h2>
+                <ul>
+                    <li>Accelerated Time-to-Market: Efficient development practices ensure your product is launched faster.</li>
+                    <li>Expert Architecture: A strong focus on creating scalable, secure, and maintainable solutions.</li>
+                    <li>Proven Leadership: Demonstrated experience leading development teams from concept to completion.</li>
+                    <li>Rigorous Quality Assurance: Commitment to delivering fully tested, high-quality, and reliable source code.</li>
+                    <li>Client-Centric Collaboration: We operate as a true partner to understand and achieve your strategic goals.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+         <div class="footer-container">
+            <div class="footer-contact">
+                <h2>Get In Touch</h2>
+                <p>Ready to build your next solution? Drop us a line.</p>
+                <form>
+                    <input type="text" placeholder="Full Name*">
+                    <input type="email" placeholder="Email*">
+                    <input type="text" placeholder="Company*">
+                    <input type="text" placeholder="Designation*">
+                    <input type="tel" placeholder="Phone">
+                    <textarea placeholder="Message*"></textarea>
+                    <button type="submit" class="btn">Submit</button>
+                </form>
+            </div>
+            <div class="footer-info">
+                 <p><a href="http://www.innovativesoftwaresolutions.org" target="_blank">www.innovativesoftwaresolutions.org</a></p>
+                 <p><a href="mailto:info@innovativesoftwaresolutions.org">info@innovativesoftwaresolutions.org</a></p>
+                 <p><a href="tel:8463951994">8463951994</a></p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 InnovaTech. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- POPUP MODAL CODE -->
+    <div class="modal-overlay" id="consultancy-modal">
+        <div class="modal">
+            <button class="close-modal">&times;</button>
+            <div class="modal-content">
+                <h2>Get A Free Consultancy</h2>
+                <p style="color:#555; margin-bottom: 20px;">Let's discuss how we can help your business grow. Fill out the form below to get started.</p>
+                <form>
+                     <input type="text" placeholder="Full Name*">
+                    <input type="email" placeholder="Email*">
+                    <input type="text" placeholder="Company*">
+                    <input type="text" placeholder="Designation*">
+                    <div class="phone-input">
+                        <select>
+                            <option>+91</option>
+                            <option>+1</option>
+                        </select>
+                        <input type="tel" placeholder="Phone">
+                    </div>
+                    <button type="submit" class="btn">Submit</button>
+                </form>
+            </div>
+            <div class="modal-image">
+                <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Business meeting and consultancy">
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+// Beginning Animation
+window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    setTimeout(() => {
+        preloader.classList.add('hidden');
+    }, 1500); // 1.5 seconds
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Make header background solid on scroll
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Fade-in sections on scroll
+    const sections = document.querySelectorAll('section');
+    const appearOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) {
+                return;
+            } else {
+                entry.target.classList.add('visible');
+                appearOnScroll.unobserve(entry.target);
+            }
+        });
+    }, appearOptions);
+
+    sections.forEach(section => {
+        if (!section.classList.contains('hero')) {
+             section.classList.add('fade-in');
+             appearOnScroll.observe(section);
+        }
+    });
+
+    // --- MODAL POPUP SCRIPT ---
+    const modal = document.getElementById('consultancy-modal');
+    const getQuoteBtn = document.getElementById('get-quote-btn');
+    const closeModalBtn = document.querySelector('.close-modal');
+
+    // --- NEW: Auto-opens modal after 7 seconds ---
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 7000); // 7000 milliseconds = 7 seconds
+
+    // Open modal when "Get a Quote" is clicked
+    getQuoteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.classList.add('active');
+    });
+
+    // Close modal with the 'X' button
+    closeModalBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+    });
+
+    // Close modal by clicking on the overlay background
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+
+});
+</script>
+</body>
+</html>
