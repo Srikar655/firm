@@ -110,11 +110,6 @@ header {
     background-color: transparent;
     transition: background-color 0.3s;
     opacity: 0;
-    animation: fade-in-header 0.5s forwards 3s;
-}
-
-@keyframes fade-in-header {
-    to { opacity: 1; }
 }
 
 header.scrolled {
@@ -132,19 +127,12 @@ header.scrolled {
     font-size: 24px;
     font-weight: 700;
     position: relative;
-    animation: move-logo-up 1s forwards 3.2s;
-}
-
-@keyframes move-logo-up {
-    from { transform: translateY(50vh); }
-    to { transform: translateY(0); }
 }
 
 .nav-container {
     transform-origin: left;
     transform: scaleX(0);
     opacity: 0;
-    animation: shoot-nav 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards 3.7s;
 }
 
 @keyframes shoot-nav {
@@ -545,13 +533,13 @@ section {
     position: relative;
     margin-top: 50px;
     perspective: 1500px;
+    overflow: hidden;
 }
 
 .project-grid {
-    display: flex;
-    gap: 30px; 
-    transition: transform 0.5s ease-in-out;
     transform-style: preserve-3d;
+    position: relative;
+    height: 450px;
 }
 
 /* --- REVISED PROJECT HIGHLIGHTS STYLES --- */
@@ -559,15 +547,16 @@ section {
     background: var(--light-grey-bg);
     border-radius: 15px;
     text-align: left;
-    flex: 0 0 calc(50% - 15px); /* Show 2 items at a time */
     padding: 40px;
     border: 1px solid transparent;
-    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s, box-shadow 0.4s, border-color 0.4s;
-    position: relative;
-    overflow: hidden;
+    transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+    position: absolute;
+    width: 60%;
+    left: 20%;
+    top: 0;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    transform: translateY(100px) rotateX(-60deg) scale(0.9);
     opacity: 0;
+    overflow: hidden;
 }
 
 .project-item::before {
@@ -899,11 +888,122 @@ form button {
     display: block;
 }
 
+.page-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(13, 13, 43, 0.7);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+.page-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* --- Get in Touch Form Animation --- */
+#footer-contact form input,
+#footer-contact form textarea,
+#footer-contact form button {
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#footer-contact form input:nth-of-type(1) { transform: translateX(-100px); }
+#footer-contact form input:nth-of-type(2) { transform: translateX(100px); }
+#footer-contact form input:nth-of-type(3) { transform: translateX(-100px); }
+#footer-contact form input:nth-of-type(4) { transform: translateX(100px); }
+#footer-contact form input:nth-of-type(5) { transform: translateY(50px); }
+#footer-contact form textarea { transform: translateY(80px); }
+#footer-contact form button { transform: scale(0.5); }
+
+#footer-contact form.is-visible input,
+#footer-contact form.is-visible textarea,
+#footer-contact form.is-visible button {
+    opacity: 1;
+    transform: none;
+}
+
+#footer-contact form.is-visible input:nth-of-type(1) { transition-delay: 0s; }
+#footer-contact form.is-visible input:nth-of-type(2) { transition-delay: 0.05s; }
+#footer-contact form.is-visible input:nth-of-type(3) { transition-delay: 0.1s; }
+#footer-contact form.is-visible input:nth-of-type(4) { transition-delay: 0.15s; }
+#footer-contact form.is-visible input:nth-of-type(5) { transition-delay: 0.2s; }
+#footer-contact form.is-visible textarea { transition-delay: 0.25s; }
+#footer-contact form.is-visible button { transition-delay: 0.4s; }
+
+
+/* --- New Animation Logic --- */
+@keyframes move-and-shrink-logo {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    40% {
+        /* Move to top-center first */
+        top: 30px;
+        transform: translate(-50%, 0) scale(0.6);
+        opacity: 1;
+    }
+    100% {
+        /* End position: top-left, small */
+        top: 30px; /* Approx final top. Header has padding 20px */
+        left: 70px; /* Approx final left. Header has padding 50px */
+        transform: translate(0, 0) scale(0.43);
+        opacity: 1;
+    }
+}
+
+@keyframes fade-in-subtle {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+body.animation-triggered #preloader {
+    background-color: transparent;
+    transition: background-color 0.5s ease;
+}
+
+body.animation-triggered #preloader .logo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* Start the animation */
+    animation: move-and-shrink-logo 1.2s cubic-bezier(0.6, 0, 0.8, 1) forwards;
+}
+
+/* Hide the original header logo while the preloader one is animating */
+body.animation-triggered header .logo {
+    opacity: 0;
+}
+/* After the animation, show the real logo */
+body.animation-triggered.animation-finished header .logo {
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+
+body.animation-triggered header,
+body.animation-triggered .contact-btn {
+    opacity: 0; /* Start hidden */
+    animation: fade-in-subtle 0.5s forwards;
+    animation-delay: 0.8s; /* Start after logo is mostly moved */
+}
+
+body.animation-triggered .nav-container {
+    animation: shoot-nav 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    animation-delay: 1s; /* Start when logo arrives */
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
     .project-item {
-        flex: 0 0 calc(50% - 15px);
+        /* flex property removed for new carousel */
     }
     .advantage-content ul {
         grid-template-columns: 1fr;
@@ -937,38 +1037,53 @@ form button {
     .nav-container {
         position: fixed;
         top: 0;
-        left: 0;
-        width: 100%;
+        right: 0;
+        width: 280px;
+        max-width: 75%;
         height: 100vh;
-        background: rgba(13, 13, 43, 0.95);
-        backdrop-filter: blur(10px);
+        background: var(--light-grey-bg);
+        box-shadow: -5px 0 25px rgba(0,0,0,0.2);
         display: flex;
-        justify-content: center;
-        align-items: center;
-        transform: translateY(-100%);
-        transition: transform 0.5s ease-in-out;
-        z-index: 1000;
-        animation: none; /* Disable fluid nav animation */
-        opacity: 1; /* Override initial opacity */
+        justify-content: flex-start;
+        align-items: flex-start; /* Align items to the top */
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        z-index: 1001; /* Above hamburger */
+        animation: none;
+        opacity: 1;
+        padding-top: 80px; /* Space for close button */
     }
     .nav-container.active {
-        transform: translateY(0);
+        transform: translateX(0);
     }
     nav {
         animation: none;
         background: transparent;
         backdrop-filter: none;
-        padding: 0;
+        padding: 20px 40px;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+        width: 100%;
     }
     nav a {
         display: block;
-        margin: 20px 0;
-        font-size: 1.8rem;
-        text-align: center;
+        margin: 15px 0;
+        font-size: 1.5rem;
+        text-align: left;
+        font-weight: 600;
+        opacity: 0;
+        transform: translateX(20px);
+        transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     }
+    .nav-container.active nav a {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    .nav-container.active nav a:nth-child(1) { transition-delay: 0.15s; }
+    .nav-container.active nav a:nth-child(2) { transition-delay: 0.2s; }
+    .nav-container.active nav a:nth-child(3) { transition-delay: 0.25s; }
+    .nav-container.active nav a:nth-child(4) { transition-delay: 0.3s; }
     .contact-btn {
         font-size: 0.9rem;
         padding: 8px 15px;
@@ -998,8 +1113,17 @@ form button {
     .logo-grid {
         grid-template-columns: 1fr 1fr;
     }
+    .recent-projects {
+        min-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
     .project-item {
-        flex: 0 0 100%;
+        width: 90%;
+        left: 5%;
+        max-height: 65vh;
+        overflow-y: auto;
     }
     form {
         grid-template-columns: 1fr;
@@ -1013,6 +1137,9 @@ form button {
 }
 
 @media (max-width: 480px) {
+    #preloader .logo {
+        font-size: 2.5rem;
+    }
     .hero h1 {
         font-size: 2.2rem;
     }
@@ -1240,9 +1367,26 @@ form button {
 // Beginning Animation
 window.addEventListener('load', function() {
     const preloader = document.getElementById('preloader');
+    const body = document.body;
+    const headerLogo = document.querySelector('header .logo');
+
+    // This is the total duration of the initial text reveal animations
+    const initialAnimationTime = 3000; // 3 seconds
+
     setTimeout(() => {
-        preloader.classList.add('hidden');
-    }, 3000); // 3 seconds
+        // Trigger the main logo move animation
+        body.classList.add('animation-triggered');
+
+        // After the logo move is complete (1.2s), hide the preloader logo
+        // and show the real header logo for a seamless swap.
+        setTimeout(() => {
+            body.classList.add('animation-finished');
+            if(preloader.parentNode) {
+                preloader.parentNode.removeChild(preloader);
+            }
+        }, 1200);
+
+    }, initialAnimationTime);
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1335,33 +1479,59 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- PROJECT CAROUSEL SCRIPT ---
-    const projectGrid = document.querySelector('.project-grid');
+    // --- PROJECT CAROUSEL SCRIPT (3D Version) ---
     const projectItems = document.querySelectorAll('.project-item');
     const nextBtn = document.querySelector('.next-btn');
     const prevBtn = document.querySelector('.prev-btn');
     let currentIndex = 0;
-    let itemsToShow = 2;
     const totalItems = projectItems.length;
     let autoScrollInterval;
 
     function updateCarousel() {
-        const itemWidth = projectItems[0].offsetWidth + 30; // width + gap
-        projectGrid.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+        projectItems.forEach((item, i) => {
+            const offset = i - currentIndex;
+
+            let transform;
+            let opacity;
+            let zIndex;
+
+            if (offset === 0) { // Current item
+                transform = 'rotateY(0) translateX(0) scale(1)';
+                opacity = 1;
+                zIndex = 10;
+            } else if (offset === 1 || (currentIndex === totalItems - 1 && i === 0)) { // Next item
+                transform = 'rotateY(-35deg) translateX(55%) scale(0.8)';
+                opacity = 0.7;
+                zIndex = 5;
+            } else if (offset === -1 || (currentIndex === 0 && i === totalItems - 1)) { // Previous item
+                transform = 'rotateY(35deg) translateX(-55%) scale(0.8)';
+                opacity = 0.7;
+                zIndex = 5;
+            } else { // Hidden items
+                transform = `rotateY(0) translateX(${offset > 0 ? 100 : -100}%) scale(0.5)`;
+                opacity = 0;
+                zIndex = 1;
+            }
+
+            item.style.transform = transform;
+            item.style.opacity = opacity;
+            item.style.zIndex = zIndex;
+        });
     }
 
     function showNext() {
-        currentIndex = (currentIndex + 1) % (totalItems - itemsToShow + 1);
+        currentIndex = (currentIndex + 1) % totalItems;
         updateCarousel();
     }
 
     function showPrev() {
-        currentIndex = (currentIndex - 1 + (totalItems - itemsToShow + 1)) % (totalItems - itemsToShow + 1);
+        currentIndex = (currentIndex - 1 + totalItems) % totalItems;
         updateCarousel();
     }
 
     function startAutoScroll() {
-        autoScrollInterval = setInterval(showNext, 5000); // Auto-scroll every 5 seconds
+        stopAutoScroll();
+        autoScrollInterval = setInterval(showNext, 5000);
     }
 
     function stopAutoScroll() {
@@ -1370,13 +1540,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     nextBtn.addEventListener('click', () => {
         showNext();
-        stopAutoScroll();
         startAutoScroll();
     });
 
     prevBtn.addEventListener('click', () => {
         showPrev();
-        stopAutoScroll();
         startAutoScroll();
     });
     
@@ -1392,55 +1560,83 @@ document.addEventListener('DOMContentLoaded', function() {
     }, { threshold: 0.2 });
     servicesObserver.observe(servicesSection);
 
-    // Lift animation for project section
+    // Initial call to set up the carousel when it scrolls into view
     const projectSection = document.querySelector('.recent-projects');
-    const projectObserver = new IntersectionObserver((entries) => {
+    const projectObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                projectItems.forEach((item, index) => {
-                    item.style.transitionDelay = `${index * 150}ms`;
-                    item.classList.add('lifted');
-                });
-                startAutoScroll();
-                projectObserver.unobserve(projectSection);
+                updateCarousel(); // Set initial positions
+                startAutoScroll(); // Start auto-scrolling
+                observer.unobserve(projectSection); // No need to observe anymore
             }
         });
     }, { threshold: 0.2 });
 
     projectObserver.observe(projectSection);
 
-    // Responsive carousel
-    function handleResize() {
-        if (window.innerWidth <= 768) {
-            itemsToShow = 1;
-        } else {
-            itemsToShow = 2;
-        }
-        updateCarousel();
-    }
-    
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Initial check
-
 
     // --- HAMBURGER MENU SCRIPT ---
     const hamburger = document.querySelector('.hamburger-menu');
     const navContainer = document.querySelector('.nav-container');
 
+    function closeMobileMenu() {
+        hamburger.classList.remove('is-active');
+        navContainer.classList.remove('active');
+        const overlay = document.querySelector('.page-overlay');
+        if (overlay) {
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                if (overlay && overlay.parentNode) {
+                    overlay.parentNode.removeChild(overlay);
+                }
+            }, 400);
+        }
+    }
+
     hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('is-active');
+        const isActive = hamburger.classList.toggle('is-active');
         navContainer.classList.toggle('active');
+
+        if (isActive) {
+            let overlay = document.querySelector('.page-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.classList.add('page-overlay');
+                document.body.appendChild(overlay);
+                overlay.addEventListener('click', closeMobileMenu);
+            }
+            // Use requestAnimationFrame to ensure the transition is applied
+            requestAnimationFrame(() => {
+                overlay.classList.add('active');
+            });
+        } else {
+            closeMobileMenu();
+        }
     });
 
     // Close nav when a link is clicked on mobile
     document.querySelectorAll('.nav-container a').forEach(link => {
         link.addEventListener('click', () => {
             if (navContainer.classList.contains('active')) {
-                hamburger.classList.remove('is-active');
-                navContainer.classList.remove('active');
+                closeMobileMenu();
             }
         });
     });
+
+    // --- Form Animation on Scroll ---
+    const contactForm = document.querySelector('#footer-contact form');
+    if (contactForm) {
+        const formObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    contactForm.classList.add('is-visible');
+                    observer.unobserve(contactForm); // Animate only once
+                }
+            });
+        }, { threshold: 0.2 });
+
+        formObserver.observe(contactForm);
+    }
 });
 </script>
 </body>
