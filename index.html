@@ -537,9 +537,10 @@ section {
 }
 
 .project-grid {
+    display: flex;
+    gap: 50px; /* Provide some space between cards */
     transform-style: preserve-3d;
-    position: relative;
-    height: 450px;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /* --- REVISED PROJECT HIGHLIGHTS STYLES --- */
@@ -550,13 +551,11 @@ section {
     padding: 40px;
     border: 1px solid transparent;
     transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
-    position: absolute;
-    width: 60%;
-    left: 20%;
-    top: 0;
+    flex: 0 0 70%; /* Set a width for the cards */
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    opacity: 0;
     overflow: hidden;
+    transform: scale(0.9); /* Default state for non-active cards */
+    opacity: 0.7;
 }
 
 .project-item::before {
@@ -570,9 +569,12 @@ section {
     transition: left 0.6s;
 }
 
+.project-item.active {
+    transform: scale(1);
+    opacity: 1;
+}
+
 .project-item:hover {
-    transform: translateY(-10px) scale(1.02) rotateX(0deg);
-    box-shadow: 0 20px 40px rgba(0, 223, 252, 0.1);
     border-color: var(--primary-color);
 }
 
@@ -943,12 +945,6 @@ form button {
         transform: translate(-50%, -50%) scale(1);
         opacity: 1;
     }
-    40% {
-        /* Move to top-center first */
-        top: 30px;
-        transform: translate(-50%, 0) scale(0.6);
-        opacity: 1;
-    }
     100% {
         /* End position: top-left, small */
         top: 30px; /* Approx final top. Header has padding 20px */
@@ -1003,7 +999,7 @@ body.animation-triggered .nav-container {
 /* Responsive adjustments */
 @media (max-width: 1024px) {
     .project-item {
-        /* flex property removed for new carousel */
+        flex-basis: 80%;
     }
     .advantage-content ul {
         grid-template-columns: 1fr;
@@ -1113,17 +1109,8 @@ body.animation-triggered .nav-container {
     .logo-grid {
         grid-template-columns: 1fr 1fr;
     }
-    .recent-projects {
-        min-height: 90vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
     .project-item {
-        width: 90%;
-        left: 5%;
-        max-height: 65vh;
-        overflow-y: auto;
+        flex-basis: 90%;
     }
     form {
         grid-template-columns: 1fr;
@@ -1177,7 +1164,6 @@ body.animation-triggered .nav-container {
                     <a href="#footer-contact">Contact</a>
                 </nav>
             </div>
-        </div>
         </div>
         <a href="tel:8463951994" class="contact-btn"><i class="fas fa-phone-alt"></i> 8463951994</a>
         <button class="hamburger-menu">
@@ -1479,7 +1465,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- PROJECT CAROUSEL SCRIPT (3D Version) ---
+    // --- PROJECT CAROUSEL SCRIPT ---
+    const projectGrid = document.querySelector('.project-grid');
     const projectItems = document.querySelectorAll('.project-item');
     const nextBtn = document.querySelector('.next-btn');
     const prevBtn = document.querySelector('.prev-btn');
@@ -1488,34 +1475,24 @@ document.addEventListener('DOMContentLoaded', function() {
     let autoScrollInterval;
 
     function updateCarousel() {
+        const container = document.querySelector('.project-carousel-container');
+        const containerWidth = container.offsetWidth;
+        const itemWidth = projectItems[0].offsetWidth;
+        const gap = 50; // The gap between items, as set in CSS
+
+        // Calculate the offset needed to center the current item
+        // This is the position of the left edge of the grid, plus half the container, minus half the item width.
+        const offset = -currentIndex * (itemWidth + gap) + (containerWidth / 2) - (itemWidth / 2);
+
+        projectGrid.style.transform = `translateX(${offset}px)`;
+
+        // Add/remove active class for the "lift" effect
         projectItems.forEach((item, i) => {
-            const offset = i - currentIndex;
-
-            let transform;
-            let opacity;
-            let zIndex;
-
-            if (offset === 0) { // Current item
-                transform = 'rotateY(0) translateX(0) scale(1)';
-                opacity = 1;
-                zIndex = 10;
-            } else if (offset === 1 || (currentIndex === totalItems - 1 && i === 0)) { // Next item
-                transform = 'rotateY(-35deg) translateX(55%) scale(0.8)';
-                opacity = 0.7;
-                zIndex = 5;
-            } else if (offset === -1 || (currentIndex === 0 && i === totalItems - 1)) { // Previous item
-                transform = 'rotateY(35deg) translateX(-55%) scale(0.8)';
-                opacity = 0.7;
-                zIndex = 5;
-            } else { // Hidden items
-                transform = `rotateY(0) translateX(${offset > 0 ? 100 : -100}%) scale(0.5)`;
-                opacity = 0;
-                zIndex = 1;
+            if (i === currentIndex) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
             }
-
-            item.style.transform = transform;
-            item.style.opacity = opacity;
-            item.style.zIndex = zIndex;
         });
     }
 
@@ -1573,6 +1550,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }, { threshold: 0.2 });
 
     projectObserver.observe(projectSection);
+
+    // Recalculate on resize
+    function handleResize() {
+        updateCarousel();
+    }
+    window.addEventListener('resize', handleResize);
 
 
     // --- HAMBURGER MENU SCRIPT ---
